@@ -1,0 +1,355 @@
+﻿{
+  "configurations": [
+    {
+      "name": "001-Windows-x64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-windows/msvc/x64-windows.cmake"
+    },
+    {
+      "name": "002-Windows-arm64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "msvc_arm64_x64" ],
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-windows/msvc/arm64-windows.cmake"
+    },
+    {
+      "name": "003-Linux-x64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "clang_cl_x64_x64" ],
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-windows/llvm/x64-linux.cmake"
+    },
+    {
+      "name": "004-Linux-arm64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-windows/llvm/arm64-linux.cmake",
+      "inheritEnvironments": [ "clang_cl_arm64_x64" ]
+    },
+    {
+      "name": "005-Linux-arm-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-windows/llvm/arm-linux.cmake",
+      "inheritEnvironments": [ "clang_cl_arm64_x64" ]
+    },
+    {
+      "name": "010————————————————",
+      "cacheRoot": "",
+      "inheritEnvironments": []
+    },
+    {
+      "name": "011-Clang-Windows-x64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "clang_cl_x64_x64" ],
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-windows/llvm/x64-windows.cmake"
+    },
+    {
+      "name": "012-Clang-Windows-arm64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "clang_cl_arm64_x64" ],
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-windows/llvm/arm64-windows.cmake"
+    },
+    {
+      "name": "013-GCC-Linux-x64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeExecutable": "cmake",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "linux_x64" ],
+      "wslPath": "${defaultWSLPath}",
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-linux/gcc/x64-linux.cmake",
+      "variables": [
+        {
+          "name": "CMAKE_INSTALL_MESSAGE",
+          "value": "NEVER",
+          "type": "STRING"
+        },
+        {
+          "name": "CMAKE_SUPPRESS_REGENERATION",
+          "value": "TRUE",
+          "type": "BOOL"
+        }
+      ]
+    },
+    {
+      "name": "014-GCC-Linux-arm64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeExecutable": "cmake",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "linux_x64" ],
+      "wslPath": "${defaultWSLPath}",
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-linux/gcc/arm64-linux.cmake",
+      "variables": [
+        {
+          "name": "CMAKE_INSTALL_MESSAGE",
+          "value": "NEVER",
+          "type": "STRING"
+        },
+        {
+          "name": "CMAKE_SUPPRESS_REGENERATION",
+          "value": "TRUE",
+          "type": "BOOL"
+        }
+      ]
+    },
+    {
+      "name": "015-GCC-Linux-arm-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeExecutable": "cmake",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "linux_x64" ],
+      "wslPath": "${defaultWSLPath}",
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-linux/gcc/arm-linux.cmake",
+      "variables": [
+        {
+          "name": "CMAKE_INSTALL_MESSAGE",
+          "value": "NEVER",
+          "type": "STRING"
+        },
+        {
+          "name": "CMAKE_SUPPRESS_REGENERATION",
+          "value": "TRUE",
+          "type": "BOOL"
+        }
+      ]
+    },
+    {
+      "name": "100————————————————",
+      "cacheRoot": "",
+      "inheritEnvironments": []
+    },
+    {
+      "name": "101-Windows-x64-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-windows/msvc/x64-windows.cmake"
+    },
+    {
+      "name": "102-Windows-arm64-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "msvc_arm64_x64" ],
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-windows/msvc/arm64-windows.cmake"
+    },
+    {
+      "name": "103-Linux-x64-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "clang_cl_x64_x64" ],
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-windows/llvm/x64-linux.cmake"
+    },
+    {
+      "name": "104-Linux-arm64-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-windows/llvm/arm64-linux.cmake",
+      "inheritEnvironments": [ "clang_cl_arm64_x64" ]
+    },
+    {
+      "name": "105-Linux-arm-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-windows/llvm/arm-linux.cmake",
+      "inheritEnvironments": [ "clang_cl_arm64_x64" ]
+    },
+    {
+      "name": "110————————————————",
+      "cacheRoot": "",
+      "inheritEnvironments": []
+    },
+    {
+      "name": "111-Clang-Windows-x64-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "clang_cl_x64_x64" ],
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-windows/llvm/x64-windows.cmake"
+    },
+    {
+      "name": "112-Clang-Windows-arm64-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "clang_cl_arm64_x64" ],
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-windows/llvm/arm64-windows.cmake"
+    },
+    {
+      "name": "113-GCC-Linux-x64-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeExecutable": "cmake",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "linux_x64" ],
+      "wslPath": "${defaultWSLPath}",
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-linux/gcc/x64-linux.cmake",
+      "variables": [
+        {
+          "name": "CMAKE_INSTALL_MESSAGE",
+          "value": "NEVER",
+          "type": "STRING"
+        },
+        {
+          "name": "CMAKE_SUPPRESS_REGENERATION",
+          "value": "TRUE",
+          "type": "BOOL"
+        }
+      ]
+    },
+    {
+      "name": "114-GCC-Linux-arm64-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeExecutable": "cmake",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "linux_x64" ],
+      "wslPath": "${defaultWSLPath}",
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-linux/gcc/arm64-linux.cmake",
+      "variables": [
+        {
+          "name": "CMAKE_INSTALL_MESSAGE",
+          "value": "NEVER",
+          "type": "STRING"
+        },
+        {
+          "name": "CMAKE_SUPPRESS_REGENERATION",
+          "value": "TRUE",
+          "type": "BOOL"
+        }
+      ]
+    },
+    {
+      "name": "115-GCC-Linux-arm-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeExecutable": "cmake",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "enableClangTidyCodeAnalysis": true,
+      "inheritEnvironments": [ "linux_x64" ],
+      "wslPath": "${defaultWSLPath}",
+      "cmakeToolchain": "C:/integration/cmake/toolchains/host-linux/gcc/arm-linux.cmake",
+      "variables": [
+        {
+          "name": "CMAKE_INSTALL_MESSAGE",
+          "value": "NEVER",
+          "type": "STRING"
+        },
+        {
+          "name": "CMAKE_SUPPRESS_REGENERATION",
+          "value": "TRUE",
+          "type": "BOOL"
+        }
+      ]
+    }
+  ]
+}

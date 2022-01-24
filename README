@@ -1,0 +1,1 @@
+This library contains C++17 std::to_char and std::from_char for the types float and double. These meant as substitutes for these functions for libstdc++ 10 and earlier, where they are missing. The implementations are taken from libstdc++ 11.
