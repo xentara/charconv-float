@@ -30,7 +30,7 @@
 // Prefer to use std::pmr::string if possible, which requires the cxx11 ABI.
 #define _GLIBCXX_USE_CXX11_ABI 1
 
-#include <charconv>
+#include <charconv.h>
 #include <string>
 #include <memory_resource>
 #include <cfenv>
@@ -40,7 +40,7 @@
 #include <cctype>
 #include <locale.h>
 #include <bits/functexcept.h>
-#if _GLIBCXX_HAVE_XLOCALE_H
+#if CHARCONV_FLOAT_HAVE_XLOCALE_H
 # include <xlocale.h>
 #endif
 
@@ -52,10 +52,11 @@
 extern "C" __ieee128 __strtoieee128(const char*, char**);
 #endif
 
-#if _GLIBCXX_HAVE_USELOCALE
+#if CHARCONV_FLOAT_HAVE_USELOCALE
 namespace std _GLIBCXX_VISIBILITY(default)
 {
-_GLIBCXX_BEGIN_NAMESPACE_VERSION
+inline namespace __chaconv_float_41f576ab_104c_442f_926d_69a25265c6cd
+{
 
 namespace
 {
@@ -512,6 +513,6 @@ from_chars(const char* first, const char* last, __ieee128& value,
 }
 #endif
 
-_GLIBCXX_END_NAMESPACE_VERSION
+} // namespace __chaconv_float_41f576ab_104c_442f_926d_69a25265c6cd
 } // namespace std
 #endif // _GLIBCXX_HAVE_USELOCALE

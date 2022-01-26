@@ -1,0 +1,2 @@
+/* whether charconv-float provides std::from_char overloads */
+#cmakedefine CHARCONV_FLOAT_HAVE_FROM_CHAR 1

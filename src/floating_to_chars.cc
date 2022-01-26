@@ -25,7 +25,21 @@
 // Activate __glibcxx_assert within this file to shake out any bugs.
 #define _GLIBCXX_ASSERTIONS 1
 
-#include <charconv>
+#include <charconv.h>
+
+// Define if float has the IEEE binary32 format.
+#if __FLT_MANT_DIG__ == 24 \
+  && __FLT_MIN_EXP__ == -125 \
+  && __FLT_MAX_EXP__ == 128
+# define _GLIBCXX_FLOAT_IS_IEEE_BINARY32 1
+#endif
+
+// Define if double has the IEEE binary64 format.
+#if __DBL_MANT_DIG__ == 53 \
+  && __DBL_MIN_EXP__ == -1021 \
+  && __DBL_MAX_EXP__ == 1024
+# define _GLIBCXX_DOUBLE_IS_IEEE_BINARY64 1
+#endif
 
 #include <bit>
 #include <cfenv>
