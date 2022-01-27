@@ -43,33 +43,23 @@ namespace std CHARCONV_FLOAT_VISIBILITY_ATTRIBUTE
 inline namespace CHARCONV_FLOAT_NAMESPACE
 {
 
-	auto to_chars(char *first, char *last, float value) noexcept -> to_chars_result;
-	auto to_chars(char *first, char *last, float value, chars_format fmt) noexcept -> to_chars_result;
-	auto to_chars(char *first, char *last, float value, chars_format fmt, int precision) noexcept -> to_chars_result;
+	auto to_chars(char* first, char* last, float value) noexcept -> to_chars_result;
+	auto to_chars(char* first, char* last, float value, chars_format fmt) noexcept -> to_chars_result;
+	auto to_chars(char* first, char* last, float value, chars_format fmt, int precision) noexcept -> to_chars_result;
 
-	auto to_chars(char *first, char *last, double value) noexcept -> to_chars_result;
-	auto to_chars(char *first, char *last, double value, chars_format fmt) noexcept -> to_chars_result;
-	auto to_chars(char *first, char *last, double value, chars_format fmt, int precision) noexcept -> to_chars_result;
+	auto to_chars(char* first, char* last, double value) noexcept -> to_chars_result;
+	auto to_chars(char* first, char* last, double value, chars_format fmt) noexcept -> to_chars_result;
+	auto to_chars(char* first, char* last, double value, chars_format fmt, int precision) noexcept -> to_chars_result;
 
-	auto to_chars(char *first, char *last, long double value) noexcept -> to_chars_result;
-	auto to_chars(char *first, char *last, long double value, chars_format fmt) noexcept -> to_chars_result;
-	auto to_chars(char *first, char *last, long double value, chars_format fmt, int precision) noexcept -> to_chars_result;
+	auto to_chars(char* first, char* last, long double value) noexcept -> to_chars_result;
+	auto to_chars(char* first, char* last, long double value, chars_format fmt) noexcept -> to_chars_result;
+	auto to_chars(char* first, char* last, long double value, chars_format fmt, int precision) noexcept -> to_chars_result;
 
-	#ifdef FLOAT128_TO_CHARS
-	auto to_chars(char *first, char *last, __float128 value) noexcept -> to_chars_result;
-	auto to_chars(char *first, char *last, __float128 value, chars_format fmt) noexcept -> to_chars_result;
-	auto to_chars(char *first, char *last, __float128 value, chars_format fmt, int precision) noexcept -> to_chars_result;
-	#endif
-
-	#if CHARCONV_FLOAT_HAVE_FROM_CHAR
-	auto from_chars(
-		const char *first, const char *last, float &value, chars_format fmt = std::chars_format::general) noexcept
-		-> from_chars_result;
-
-	auto from_chars(
-		const char *first, const char *last, double &value, chars_format fmt = std::chars_format::general) noexcept
-		-> from_chars_result;
-	#endif
+#if CHARCONV_FLOAT_HAVE_FROM_CHAR
+	auto from_chars(const char* first, const char* last, float& value, chars_format fmt = chars_format::general) noexcept -> from_chars_result;
+	auto from_chars(const char* first, const char* last, double& value, chars_format fmt = chars_format::general) noexcept -> from_chars_result;
+	auto from_chars(const char* first, const char* last, long double& value, chars_format fmt = chars_format::general) noexcept -> from_chars_result;
+#endif
 
 } // namespace CHARCONV_FLOAT_NAMESPACE
 

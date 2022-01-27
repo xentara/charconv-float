@@ -513,6 +513,6 @@ from_chars(const char* first, const char* last, __ieee128& value,
 }
 #endif
 
-} // namespace __chaconv_float_41f576ab_104c_442f_926d_69a25265c6cd
+} // namespace CHARCONV_FLOAT_NAMESPACE
 } // namespace std
 #endif // _GLIBCXX_HAVE_USELOCALE

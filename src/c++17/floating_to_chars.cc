@@ -109,7 +109,8 @@ using F128_type = void;
 
 namespace
 {
-#if 0 // libstdc++10 does not have to_chars for unsigned __int128
+// libstdc++10 does not have to_chars for unsigned __int128
+#if defined __SIZEOF_INT128__ && _GLIBCXX_RELEASE >= 11
   using uint128_t = unsigned __int128;
 #else
 # include "uint128_t.h"
@@ -569,7 +570,8 @@ namespace
   get_mantissa_length(const ryu::floating_decimal_128 fd)
   { return ryu::generic128::decimalLength(fd.mantissa); }
 
-#if 1 // libstdc++10 does not have to_chars for unsigned __int128
+// libstdc++10 does not have to_chars for unsigned __int128
+#if !defined __SIZEOF_INT128__ || _GLIBCXX_RELEASE < 11
   // An implementation of base-10 std::to_chars for the uint128_t class type,
   // used by targets that lack __int128.
   std::to_chars_result
@@ -1677,7 +1679,7 @@ _ZSt8to_charsPcS_eSt12chars_formati(char* first, char* last, double value,
   __attribute__((alias ("_ZSt8to_charsPcS_dSt12chars_formati")));
 #endif
 
-} // namespace __chaconv_float_41f576ab_104c_442f_926d_69a25265c6cd
+} // namespace CHARCONV_FLOAT_NAMESPACE
 } // namespace std
 
 #endif // _GLIBCXX_FLOAT_IS_IEEE_BINARY32 && _GLIBCXX_DOUBLE_IS_IEEE_BINARY64
