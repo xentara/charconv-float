@@ -1,0 +1,47 @@
+1a2
+> // std::to_chars implementation for floating-point types -*- C++ -*-
+28c29,43
+< #include <charconv>
+---
+> #include <charconv-float.h>
+> 
+> // Define if float has the IEEE binary32 format.
+> #if __FLT_MANT_DIG__ == 24 \
+>   && __FLT_MIN_EXP__ == -125 \
+>   && __FLT_MAX_EXP__ == 128
+> # define _GLIBCXX_FLOAT_IS_IEEE_BINARY32 1
+> #endif
+> 
+> // Define if double has the IEEE binary64 format.
+> #if __DBL_MANT_DIG__ == 53 \
+>   && __DBL_MIN_EXP__ == -1021 \
+>   && __DBL_MAX_EXP__ == 1024
+> # define _GLIBCXX_DOUBLE_IS_IEEE_BINARY64 1
+> #endif
+97c112,113
+< #if defined __SIZEOF_INT128__
+---
+> // libstdc++10 does not have to_chars for unsigned __int128
+> #if defined __SIZEOF_INT128__ && _GLIBCXX_RELEASE >= 11
+557c573,574
+< #if !defined __SIZEOF_INT128__
+---
+> // libstdc++10 does not have to_chars for unsigned __int128
+> #if !defined __SIZEOF_INT128__ || _GLIBCXX_RELEASE < 11
+582c599,602
+< namespace std _GLIBCXX_VISIBILITY(default)
+---
+> namespace std CHARCONV_FLOAT_VISIBILITY_ATTRIBUTE
+> {
+> 
+> inline namespace CHARCONV_FLOAT_NAMESPACE
+584c604
+< _GLIBCXX_BEGIN_NAMESPACE_VERSION
+---
+> using std::to_chars;
+1080a1101
+> 		//[[maybe_unused]] struct {} x = fd.mantissa;
+1661c1682
+< _GLIBCXX_END_NAMESPACE_VERSION
+---
+> } // namespace CHARCONV_FLOAT_NAMESPACE
