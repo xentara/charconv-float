@@ -97,8 +97,8 @@ endif()
 add_library(
 	${PROJECT_NAME} ${CHARCONV_FLOAT_TARGET_TYPE}
 
-	src/floating_to_chars.cc
-	src/floating_from_chars.cc
+	src/c++17/floating_to_chars.cc
+	src/c++17/floating_from_chars.cc
 )
 
 target_compile_definitions(
