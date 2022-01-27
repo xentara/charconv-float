@@ -20,11 +20,22 @@
 # see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
 # <http://www.gnu.org/licenses/>.
 
-try_compile(CHARCONV_FLOAT_PATCH_LIBSTDCXX "${CMAKE_CURRENT_BINARY_DIR}/CharconfFloat" "${CMAKE_CURRENT_LIST_DIR}/check_libstdcxx_version.cc")
+if(NOT TARGET CharconvFloat::libstdcxx-patch)
+
+try_compile(
+	CHARCONV_FLOAT_PATCH_LIBSTDCXX
+
+	"${CMAKE_CURRENT_BINARY_DIR}/CharconfFloat"
+	"${CMAKE_CURRENT_LIST_DIR}/check_libstdcxx_version.cc"
+)
 
 if(CHARCONV_FLOAT_PATCH_LIBSTDCXX)
 
-	try_compile(CHARCONV_FLOAT_PATCH_STD_HEADERS "${CMAKE_CURRENT_BINARY_DIR}/CharconfFloat" "${CMAKE_CURRENT_LIST_DIR}/check_include_next.cc")
+	try_compile(
+		CHARCONV_FLOAT_PATCH_STD_HEADERS
+
+		"${CMAKE_CURRENT_BINARY_DIR}/CharconfFloat"
+		"${CMAKE_CURRENT_LIST_DIR}/check_include_next.cc")
 
 	add_library(CharconvFloat::libstdcxx-patch ALIAS CharconvFloat::charconv-float)
 
@@ -33,3 +44,5 @@ else(CHARCONV_FLOAT_PATCH_LIBSTDCXX)
 	add_library(CharconvFloat::libstdcxx-patch INTERFACE IMPORTED)
 
 endif(CHARCONV_FLOAT_PATCH_LIBSTDCXX)
+
+endif(NOT TARGET CharconvFloat::libstdcxx-patch)

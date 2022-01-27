@@ -28,55 +28,74 @@ project(charconv-float
 	HOMEPAGE_URL "https://www.emocean.io"
 	LANGUAGES CXX)
 
-# Support special features of embedded ocean GmbH's Synos build system
-find_package(EmoceanBuildSystem1 QUIET)
+###########################################################################
+# Options and settings
 
-if(NOT CMAKE_SYSTEM_NAME STREQUAL Windows)
+option(CHARCONV_FLOAT_STATIC "whether to build charconv-float as a static library" OFF)
+
+set(CHARCONV_FLOAT_NAMESPACE "__charconv_float" CACHE STRING "the inline namespace used for to_char and from_char")
+set(CHARCONV_FLOAT_VISIBILITY "default" CACHE STRING "the ELF visibility used for to_char and from_char functions")
 
 ###########################################################################
 # Check system features
 
-set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+try_compile(CHARCONV_FLOAT_HAVE_USELOCALE
+	${CMAKE_CURRENT_BINARY_DIR}/check_uselocale
+	${CMAKE_CURRENT_SOURCE_DIR}/config/check_uselocale.cc
 
-try_compile(HAVE_USELOCALE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/config/check_uselocale.cc
 	CXX_STANDARD 17
 	CXX_STANDARD_REQUIRED ON
 )
 
-try_compile(HAVE_XLOCALE_H ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/config/check_xlocale.cc
+try_compile(CHARCONV_FLOAT_HAVE_XLOCALE_H
+	${CMAKE_CURRENT_BINARY_DIR}/check_xlocale
+	${CMAKE_CURRENT_SOURCE_DIR}/config/check_xlocale.cc
+
 	CXX_STANDARD 17
 	CXX_STANDARD_REQUIRED ON
 )
 
-try_compile(HAVE_COMPATIBLE_GLIBCXX ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/config/check_libstdcxx_version.cc
+try_compile(CHARCONV_FLOAT_HAVE_COMPATIBLE_GLIBCXX
+	${CMAKE_CURRENT_BINARY_DIR}/check_libstdcxx_version
+	${CMAKE_CURRENT_SOURCE_DIR}/config/check_libstdcxx_version.cc
+
 	CXX_STANDARD 17
 	CXX_STANDARD_REQUIRED ON
 )
 
-try_compile(HAVE_INCLUDE_NEXT ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/config/check_include_next.cc
+try_compile(CHARCONV_FLOAT_HAVE_INCLUDE_NEXT
+	${CMAKE_CURRENT_BINARY_DIR}/check_include_next
+	${CMAKE_CURRENT_SOURCE_DIR}/config/check_include_next.cc
+
 	CXX_STANDARD 17
 	CXX_STANDARD_REQUIRED ON
 )
 
-if(HAVE_INCLUDE_NEXT AND HAVE_COMPATIBLE_GLIBCXX)
+if(CHARCONV_FLOAT_HAVE_INCLUDE_NEXT AND CHARCONV_FLOAT_HAVE_COMPATIBLE_GLIBCXX)
 	set(CHARCONV_FLOAT_PATCH_STD_HEADERS TRUE)
 endif()
 
 ###########################################################################
 # generate the config include
 
-if(HAVE_USELOCALE)
+if(CHARCONV_FLOAT_HAVE_USELOCALE)
 	set(CHARCONV_FLOAT_HAVE_FROM_CHAR TRUE)
 endif()
 
-set(CONFIG_HEADER_FILE "${CMAKE_CURRENT_BINARY_DIR}/include/bits/charconv-float-config.h")
-configure_file(config/charconv-float-config.h.in "${CONFIG_HEADER_FILE}" @ONLY)
+set(CHARCONV_FLOAT_CONFIG_HEADER_FILE "${CMAKE_CURRENT_BINARY_DIR}/include/charconv-float-config.h")
+configure_file(config/charconv-float-config.h.in "${CHARCONV_FLOAT_CONFIG_HEADER_FILE}" @ONLY)
 
 ###########################################################################
 # define the library
 
+if(CHARCONV_FLOAT_STATIC)
+	set(CHARCONV_FLOAT_TARGET_TYPE STATIC)
+else()
+	set(CHARCONV_FLOAT_TARGET_TYPE SHARED)
+endif()
+
 add_library(
-	${PROJECT_NAME} SHARED
+	${PROJECT_NAME} ${CHARCONV_FLOAT_TARGET_TYPE}
 
 	src/floating_to_chars.cc
 	src/floating_from_chars.cc
@@ -86,8 +105,8 @@ target_compile_definitions(
 	${PROJECT_NAME}
 
 	PRIVATE
-		$<$<BOOL:${HAVE_USELOCALE}>:CHARCONV_FLOAT_HAVE_USELOCALE=1>
-		$<$<BOOL:${HAVE_XLOCALE_H}>:CHARCONV_FLOAT_HAVE_XLOCALE_H=1>
+		$<$<BOOL:${CHARCONV_FLOAT_HAVE_USELOCALE}>:CHARCONV_FLOAT_HAVE_USELOCALE=1>
+		$<$<BOOL:${CHARCONV_FLOAT_HAVE_XLOCALE_H}>:CHARCONV_FLOAT_HAVE_XLOCALE_H=1>
 )
 
 target_compile_options(
@@ -131,58 +150,44 @@ set_target_properties(
 ###########################################################################
 # export and install the project
 
-if (NOT EmoceanBuildSystem_FOUND)
+# Skip this entire section if no installation is desired
+if(NOT CMAKE_SKIP_INSTALL_RULES)
 
-	include(GNUInstallDirs)
-	include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
-	set(MODULE_CONFIG_FILE "${CMAKE_CURRENT_BINARY_DIR}/CharconvFloatConfig.cmake")
-	set(MODULE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/CharconvFloatVersion.cmake")
+set(CHARCONV_FLOAT_INCLUDEDIR "${CMAKE_INSTALL_INCLUDEDIR}/charconv-float")
+set(CHARCONV_FLOAT_MODULEDIR "${CMAKE_INSTALL_DATADIR}/cmake/CharconvFloat")
 
-	configure_package_config_file(
-		config/CharconvFloatConfig.cmake.in
-		${MODULE_CONFIG_FILE}
+set(CHARCONV_FLOAT_MODULE_CONFIG_FILE "${CMAKE_CURRENT_BINARY_DIR}/module/CharconvFloatConfig.cmake")
+set(CHARCONV_FLOAT_MODULE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/module/CharconvFloatVersion.cmake")
 
-		INSTALL_DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/CharconvFloat"
-	)
+configure_package_config_file(
+	config/CharconvFloatConfig.cmake.in
+	${CHARCONV_FLOAT_MODULE_CONFIG_FILE}
 
-	write_basic_package_version_file(
-		${MODULE_VERSION_FILE}
+	INSTALL_DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/CharconvFloat"
+)
 
-		VERSION ${PROJECT_VERSION}
-		COMPATIBILITY SameMajorVersion
-	)
+write_basic_package_version_file(
+	${CHARCONV_FLOAT_MODULE_VERSION_FILE}
 
-	install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}-targets RUNTIME ARCHIVE)
+	VERSION ${PROJECT_VERSION}
+	COMPATIBILITY SameMajorVersion
+)
 
-	install(FILES include/charconv.h DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/charconv-float")
-	install(FILES include/std/charconv DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/charconv-float/std")
-	install(FILES "${CONFIG_HEADER_FILE}" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/charconv-float/bits")
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}-targets RUNTIME ARCHIVE)
 
-	install(EXPORT ${PROJECT_NAME}-targets NAMESPACE CharconvFloat FILE CharconvFloatTargets.cmake DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/CharconvFloat")
-	install(FILES "${MODULE_CONFIG_FILE}" DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/CharconvFloat")
-	install(FILES "${MODULE_VERSION_FILE}" DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/CharconvFloat")
-	install(FILES config/PatchLibstdcxx.cmake DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/CharconvFloat")
-	install(FILES config/check_include_next.cc DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/CharconvFloat")
-	install(FILES config/check_libstdcxx_version.cc DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/CharconvFloat")
+install(FILES include/charconv-float.h DESTINATION "${CHARCONV_FLOAT_INCLUDEDIR}")
+install(FILES "${CHARCONV_FLOAT_CONFIG_HEADER_FILE}" DESTINATION "${CHARCONV_FLOAT_INCLUDEDIR}")
 
-else(NOT EmoceanBuildSystem_FOUND)
+install(FILES include/std/charconv DESTINATION "${CHARCONV_FLOAT_INCLUDEDIR}/std")
 
-	emocean_install_target(${PROJECT_NAME}
-		NAMESPACE CharconvFloat
+install(EXPORT ${PROJECT_NAME}-targets NAMESPACE CharconvFloat FILE CharconvFloatTargets.cmake DESTINATION "${CHARCONV_FLOAT_MODULEDIR}")
+install(FILES "${CHARCONV_FLOAT_MODULE_CONFIG_FILE}" DESTINATION "${CHARCONV_FLOAT_MODULEDIR}")
+install(FILES "${CHARCONV_FLOAT_MODULE_VERSION_FILE}" DESTINATION "${CHARCONV_FLOAT_MODULEDIR}")
+install(FILES config/PatchLibstdcxx.cmake DESTINATION "${CHARCONV_FLOAT_MODULEDIR}")
+install(FILES config/check_include_next.cc DESTINATION "${CHARCONV_FLOAT_MODULEDIR}")
+install(FILES config/check_libstdcxx_version.cc DESTINATION "${CHARCONV_FLOAT_MODULEDIR}")
 
-		CMAKE_MODULE_INCLUDES
-			config/PatchLibstdcxx.cmake
-
-		CMAKE_MODULE_HELPER_FILES
-			config/check_include_next.cc
-			config/check_libstdcxx_version.cc
-	)
-
-	emocean_install_files(include/charconv.h DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/charconv-float" COMPONENT devel)
-	emocean_install_files(include/std/charconv DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/charconv-float/std" COMPONENT devel)
-	emocean_install_files("${CONFIG_HEADER_FILE}" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/charconv-float/bits" COMPONENT devel)
-
-endif(NOT EmoceanBuildSystem_FOUND)
-
-endif(NOT CMAKE_SYSTEM_NAME STREQUAL Windows)
+endif(NOT CMAKE_SKIP_INSTALL_RULES)

@@ -1,4 +1,5 @@
 // std::to_chars implementation for floating-point types -*- C++ -*-
+// std::to_chars implementation for floating-point types -*- C++ -*-
 
 // Copyright (C) 2020-2021 Free Software Foundation, Inc.
 //
@@ -25,7 +26,7 @@
 // Activate __glibcxx_assert within this file to shake out any bugs.
 #define _GLIBCXX_ASSERTIONS 1
 
-#include <charconv.h>
+#include <charconv-float.h>
 
 // Define if float has the IEEE binary32 format.
 #if __FLT_MANT_DIG__ == 24 \
@@ -593,10 +594,10 @@ namespace
 #endif
 } // anon namespace
 
-namespace std _GLIBCXX_VISIBILITY(default)
+namespace std CHARCONV_FLOAT_VISIBILITY_ATTRIBUTE
 {
 
-inline namespace __chaconv_float_41f576ab_104c_442f_926d_69a25265c6cd
+inline namespace CHARCONV_FLOAT_NAMESPACE
 {
 using std::to_chars;
 

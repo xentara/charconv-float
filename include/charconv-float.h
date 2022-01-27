@@ -32,12 +32,15 @@
 #	define __cpp_lib_to_chars 201611L
 #endif
 
-#include <bits/charconv-float-config.h>
+#include "charconv-float-config.h"
 
-namespace std _GLIBCXX_VISIBILITY(default)
+#define CHARCONV_FLOAT_VISIBILITY_ATTRIBUTE_WRAPPER(visibility) _GLIBCXX_VISIBILITY(visibility)
+#define CHARCONV_FLOAT_VISIBILITY_ATTRIBUTE CHARCONV_FLOAT_VISIBILITY_ATTRIBUTE_WRAPPER(CHARCONV_FLOAT_VISIBILITY)
+
+namespace std CHARCONV_FLOAT_VISIBILITY_ATTRIBUTE
 {
 
-inline namespace __chaconv_float_41f576ab_104c_442f_926d_69a25265c6cd
+inline namespace CHARCONV_FLOAT_NAMESPACE
 {
 
 	auto to_chars(char *first, char *last, float value) noexcept -> to_chars_result;
@@ -68,7 +71,7 @@ inline namespace __chaconv_float_41f576ab_104c_442f_926d_69a25265c6cd
 		-> from_chars_result;
 	#endif
 
-} // namespace __chaconv_float_41f576ab_104c_442f_926d_69a25265c6cd
+} // namespace CHARCONV_FLOAT_NAMESPACE
 
 } // namespace std
 

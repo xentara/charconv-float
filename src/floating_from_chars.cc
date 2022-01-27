@@ -30,7 +30,7 @@
 // Prefer to use std::pmr::string if possible, which requires the cxx11 ABI.
 #define _GLIBCXX_USE_CXX11_ABI 1
 
-#include <charconv.h>
+#include <charconv-float.h>
 #include <string>
 #include <memory_resource>
 #include <cfenv>
@@ -53,9 +53,9 @@ extern "C" __ieee128 __strtoieee128(const char*, char**);
 #endif
 
 #if CHARCONV_FLOAT_HAVE_USELOCALE
-namespace std _GLIBCXX_VISIBILITY(default)
+namespace std CHARCONV_FLOAT_VISIBILITY_ATTRIBUTE
 {
-inline namespace __chaconv_float_41f576ab_104c_442f_926d_69a25265c6cd
+inline namespace CHARCONV_FLOAT_NAMESPACE
 {
 
 namespace
