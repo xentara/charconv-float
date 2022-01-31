@@ -23,26 +23,34 @@
 if(NOT TARGET CharconvFloat::libstdcxx-patch)
 
 try_compile(
-	CHARCONV_FLOAT_PATCH_LIBSTDCXX
+	_CHARCONV_FLOAT_PATCH_LIBSTDCXX
 
 	"${CMAKE_CURRENT_BINARY_DIR}/CharconfFloat"
 	"${CMAKE_CURRENT_LIST_DIR}/check_libstdcxx_version.cc"
 )
 
-if(CHARCONV_FLOAT_PATCH_LIBSTDCXX)
+if(_CHARCONV_FLOAT_PATCH_LIBSTDCXX)
 
 	try_compile(
-		CHARCONV_FLOAT_PATCH_STD_HEADERS
+		_CHARCONV_FLOAT_PATCH_STD_HEADERS
 
 		"${CMAKE_CURRENT_BINARY_DIR}/CharconfFloat"
 		"${CMAKE_CURRENT_LIST_DIR}/check_include_next.cc")
 
+	if(_CHARCONV_FLOAT_PATCH_STD_HEADERS)
+		target_include_directories(CharconvFloat::charconv-float INTERFACE "${_IMPORT_PREFIX}/include/charconv-float/std>")
+	endif(_CHARCONV_FLOAT_PATCH_STD_HEADERS)
+
+	unset(_CHARCONV_FLOAT_PATCH_STD_HEADERS)
+
 	add_library(CharconvFloat::libstdcxx-patch ALIAS CharconvFloat::charconv-float)
 
-else(CHARCONV_FLOAT_PATCH_LIBSTDCXX)
+else(_CHARCONV_FLOAT_PATCH_LIBSTDCXX)
 
 	add_library(CharconvFloat::libstdcxx-patch INTERFACE IMPORTED)
 
-endif(CHARCONV_FLOAT_PATCH_LIBSTDCXX)
+endif(_CHARCONV_FLOAT_PATCH_LIBSTDCXX)
+
+unset(_CHARCONV_FLOAT_PATCH_LIBSTDCXX)
 
 endif(NOT TARGET CharconvFloat::libstdcxx-patch)

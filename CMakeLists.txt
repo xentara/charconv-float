@@ -31,15 +31,16 @@ project(charconv-float
 ###########################################################################
 # Options and settings
 
-option(CHARCONV_FLOAT_STATIC "whether to build charconv-float as a static library" OFF)
-
+set(CHARCONV_FLOAT_TARGET_TYPE SHARED CACHE STRING "the cmake target type for the library to build")
 set(CHARCONV_FLOAT_NAMESPACE "__charconv_float" CACHE STRING "the inline namespace used for to_char and from_char")
 set(CHARCONV_FLOAT_VISIBILITY "default" CACHE STRING "the ELF visibility used for to_char and from_char functions")
+
+set_property(CACHE CHARCONV_FLOAT_TARGET_TYPE PROPERTY STRINGS SHARED STATIC OBJECT)
 
 ###########################################################################
 # Check system features
 
-try_compile(CHARCONV_FLOAT_HAVE_USELOCALE
+try_compile(HAVE_USELOCALE
 	${CMAKE_CURRENT_BINARY_DIR}/check_uselocale
 	${CMAKE_CURRENT_SOURCE_DIR}/config/check_uselocale.cc
 
@@ -47,7 +48,7 @@ try_compile(CHARCONV_FLOAT_HAVE_USELOCALE
 	CXX_STANDARD_REQUIRED ON
 )
 
-try_compile(CHARCONV_FLOAT_HAVE_XLOCALE_H
+try_compile(HAVE_XLOCALE_H
 	${CMAKE_CURRENT_BINARY_DIR}/check_xlocale
 	${CMAKE_CURRENT_SOURCE_DIR}/config/check_xlocale.cc
 
@@ -55,7 +56,7 @@ try_compile(CHARCONV_FLOAT_HAVE_XLOCALE_H
 	CXX_STANDARD_REQUIRED ON
 )
 
-try_compile(CHARCONV_FLOAT_HAVE_COMPATIBLE_GLIBCXX
+try_compile(HAVE_COMPATIBLE_GLIBCXX
 	${CMAKE_CURRENT_BINARY_DIR}/check_libstdcxx_version
 	${CMAKE_CURRENT_SOURCE_DIR}/config/check_libstdcxx_version.cc
 
@@ -63,7 +64,7 @@ try_compile(CHARCONV_FLOAT_HAVE_COMPATIBLE_GLIBCXX
 	CXX_STANDARD_REQUIRED ON
 )
 
-try_compile(CHARCONV_FLOAT_HAVE_INCLUDE_NEXT
+try_compile(HAVE_INCLUDE_NEXT
 	${CMAKE_CURRENT_BINARY_DIR}/check_include_next
 	${CMAKE_CURRENT_SOURCE_DIR}/config/check_include_next.cc
 
@@ -71,28 +72,22 @@ try_compile(CHARCONV_FLOAT_HAVE_INCLUDE_NEXT
 	CXX_STANDARD_REQUIRED ON
 )
 
-if(CHARCONV_FLOAT_HAVE_INCLUDE_NEXT AND CHARCONV_FLOAT_HAVE_COMPATIBLE_GLIBCXX)
-	set(CHARCONV_FLOAT_PATCH_STD_HEADERS TRUE)
+if(HAVE_INCLUDE_NEXT AND HAVE_COMPATIBLE_GLIBCXX)
+	set(PATCH_STD_HEADERS TRUE)
 endif()
 
 ###########################################################################
 # generate the config include
 
-if(CHARCONV_FLOAT_HAVE_USELOCALE)
+if(HAVE_USELOCALE)
 	set(CHARCONV_FLOAT_HAVE_FROM_CHAR TRUE)
 endif()
 
-set(CHARCONV_FLOAT_CONFIG_HEADER_FILE "${CMAKE_CURRENT_BINARY_DIR}/include/charconv-float-config.h")
-configure_file(config/charconv-float-config.h.in "${CHARCONV_FLOAT_CONFIG_HEADER_FILE}" @ONLY)
+set(CONFIG_HEADER_FILE "${CMAKE_CURRENT_BINARY_DIR}/include/charconv-float-config.h")
+configure_file(config/charconv-float-config.h.in "${CONFIG_HEADER_FILE}" @ONLY)
 
 ###########################################################################
 # define the library
-
-if(CHARCONV_FLOAT_STATIC)
-	set(CHARCONV_FLOAT_TARGET_TYPE STATIC)
-else()
-	set(CHARCONV_FLOAT_TARGET_TYPE SHARED)
-endif()
 
 add_library(
 	${PROJECT_NAME} ${CHARCONV_FLOAT_TARGET_TYPE}
@@ -105,8 +100,8 @@ target_compile_definitions(
 	${PROJECT_NAME}
 
 	PRIVATE
-		$<$<BOOL:${CHARCONV_FLOAT_HAVE_USELOCALE}>:CHARCONV_FLOAT_HAVE_USELOCALE=1>
-		$<$<BOOL:${CHARCONV_FLOAT_HAVE_XLOCALE_H}>:CHARCONV_FLOAT_HAVE_XLOCALE_H=1>
+		$<$<BOOL:${HAVE_USELOCALE}>:CHARCONV_FLOAT_HAVE_USELOCALE=1>
+		$<$<BOOL:${HAVE_XLOCALE_H}>:CHARCONV_FLOAT_HAVE_XLOCALE_H=1>
 )
 
 target_compile_options(
@@ -130,11 +125,19 @@ target_include_directories(
 	PUBLIC
 		"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
 		"$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
-		"$<BUILD_INTERFACE:$<$<BOOL:${CHARCONV_FLOAT_PATCH_STD_HEADERS}>:${CMAKE_CURRENT_BINARY_DIR}/include/std>>"
-
 		"$<INSTALL_INTERFACE:include/charconv-float>"
-		"$<INSTALL_INTERFACE:$<$<BOOL:${CHARCONV_FLOAT_PATCH_STD_HEADERS}>:\${_IMPORT_PREFIX}/include/charconv-float/std>>"
 )
+
+if(PATCH_STD_HEADERS)
+
+target_include_directories(
+	${PROJECT_NAME}
+	
+	PUBLIC
+		"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/std>"
+)
+
+endif(PATCH_STD_HEADERS)
 
 set_target_properties(
 	${PROJECT_NAME}
@@ -156,38 +159,53 @@ if(NOT CMAKE_SKIP_INSTALL_RULES)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-set(CHARCONV_FLOAT_INCLUDEDIR "${CMAKE_INSTALL_INCLUDEDIR}/charconv-float")
-set(CHARCONV_FLOAT_MODULEDIR "${CMAKE_INSTALL_DATADIR}/cmake/CharconvFloat")
+set(INSTALL_INCLUDEDIR "${CMAKE_INSTALL_INCLUDEDIR}/charconv-float")
+set(INSTALL_MODULEDIR "${CMAKE_INSTALL_DATADIR}/cmake/CharconvFloat")
 
-set(CHARCONV_FLOAT_MODULE_CONFIG_FILE "${CMAKE_CURRENT_BINARY_DIR}/module/CharconvFloatConfig.cmake")
-set(CHARCONV_FLOAT_MODULE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/module/CharconvFloatVersion.cmake")
+set(MODULE_CONFIG_FILE "${CMAKE_CURRENT_BINARY_DIR}/module/CharconvFloatConfig.cmake")
+set(MODULE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/module/CharconvFloatVersion.cmake")
 
 configure_package_config_file(
 	config/CharconvFloatConfig.cmake.in
-	${CHARCONV_FLOAT_MODULE_CONFIG_FILE}
+	${MODULE_CONFIG_FILE}
 
 	INSTALL_DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/CharconvFloat"
 )
 
 write_basic_package_version_file(
-	${CHARCONV_FLOAT_MODULE_VERSION_FILE}
+	${MODULE_VERSION_FILE}
 
 	VERSION ${PROJECT_VERSION}
 	COMPATIBILITY SameMajorVersion
 )
 
 install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}-targets RUNTIME ARCHIVE)
+install(EXPORT ${PROJECT_NAME}-targets NAMESPACE CharconvFloat:: FILE CharconvFloatTargets.cmake DESTINATION "${INSTALL_MODULEDIR}")
 
-install(FILES include/charconv-float.h DESTINATION "${CHARCONV_FLOAT_INCLUDEDIR}")
-install(FILES "${CHARCONV_FLOAT_CONFIG_HEADER_FILE}" DESTINATION "${CHARCONV_FLOAT_INCLUDEDIR}")
+install(
+	FILES
+		include/charconv-float.h
+		"${CONFIG_HEADER_FILE}"
+	
+	DESTINATION "${INSTALL_INCLUDEDIR}"
+)
 
-install(FILES include/std/charconv DESTINATION "${CHARCONV_FLOAT_INCLUDEDIR}/std")
+install(
+	FILES
+		include/std/charconv
+		
+	DESTINATION "${INSTALL_INCLUDEDIR}/std"
+)
 
-install(EXPORT ${PROJECT_NAME}-targets NAMESPACE CharconvFloat FILE CharconvFloatTargets.cmake DESTINATION "${CHARCONV_FLOAT_MODULEDIR}")
-install(FILES "${CHARCONV_FLOAT_MODULE_CONFIG_FILE}" DESTINATION "${CHARCONV_FLOAT_MODULEDIR}")
-install(FILES "${CHARCONV_FLOAT_MODULE_VERSION_FILE}" DESTINATION "${CHARCONV_FLOAT_MODULEDIR}")
-install(FILES config/PatchLibstdcxx.cmake DESTINATION "${CHARCONV_FLOAT_MODULEDIR}")
-install(FILES config/check_include_next.cc DESTINATION "${CHARCONV_FLOAT_MODULEDIR}")
-install(FILES config/check_libstdcxx_version.cc DESTINATION "${CHARCONV_FLOAT_MODULEDIR}")
+install(
+	FILES
+		"${MODULE_CONFIG_FILE}"
+		"${MODULE_VERSION_FILE}"
+		config/PatchLibstdcxx.cmake
+		config/check_include_next.cc
+		config/check_libstdcxx_version.cc
+	
+	DESTINATION "${INSTALL_MODULEDIR}"
+)
 
 endif(NOT CMAKE_SKIP_INSTALL_RULES)
