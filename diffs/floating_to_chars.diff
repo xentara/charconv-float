@@ -39,6 +39,18 @@
 < _GLIBCXX_BEGIN_NAMESPACE_VERSION
 ---
 > using std::to_chars;
+802c822
+< 	const unsigned nibble = effective_mantissa >> rounded_mantissa_bits;
+---
+> 	const unsigned nibble = unsigned(effective_mantissa >> rounded_mantissa_bits);
+809c829
+< 	const unsigned nibble = effective_mantissa >> (rounded_mantissa_bits-4);
+---
+> 	const unsigned nibble = unsigned(effective_mantissa >> (rounded_mantissa_bits-4));
+850c870
+< 	    const unsigned nibble = effective_mantissa >> nibble_offset;
+---
+> 	    const unsigned nibble = unsigned(effective_mantissa >> nibble_offset);
 1080a1101
 > 		//[[maybe_unused]] struct {} x = fd.mantissa;
 1661c1682
