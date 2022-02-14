@@ -25,7 +25,7 @@ cmake_minimum_required(VERSION 3.19)
 project(charconv-float 
 	VERSION 1.0.0
 	DESCRIPTION "substitues for C++17 std::to_char and std::from_char for float and double in libstdc++ 10 and earlier"
-	HOMEPAGE_URL "https://www.emocean.io"
+	HOMEPAGE_URL "https://gitlab.com/embedded-ocean/oss/charconv-float"
 	LANGUAGES CXX)
 
 ###########################################################################
